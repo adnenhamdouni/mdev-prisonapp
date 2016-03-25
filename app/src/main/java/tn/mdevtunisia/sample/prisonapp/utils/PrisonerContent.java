@@ -10,10 +10,10 @@ import tn.mdevtunisia.sample.prisonapp.models.Prisoner;
  */
 public class PrisonerContent {
 
-    public static String[] names = {"Name 1", "Name 2", "Name 3", "Name 4", "Name 5"};
-    public static String[] matricules = {"911", "912", "913", "914", "915"};
-    public static Integer[] pictures = {R.drawable.profil, R.drawable.profil, R.drawable.profil, R.drawable.profil, R.drawable.profil};
-    public static String[] durations = {"50 years - 1980", "45 years ", "Name 3", "Name 4", "Name 5"};
+    public static  String[] names = {"Pablo Escobar" , "Alphone Gabriel Capone", "Charles Bronson" , "Joaquín Guzmán Elchapo" , "Tommy"};
+    public static  String[] matricules = {"911" , "912" , "913" , "914" , "915"};
+    public static  String[] durations = {"50 years - 1980" , "45 years - 1970" , "35 years - 2009" , "50 years - 2015" , "45 years - 1990"};
+    public static Integer[] pictures ={R.drawable.escobar, R.drawable.alcapone, R.drawable.bronson, R.drawable.elchapo, R.drawable.tommy};
 
     public static ArrayList<Prisoner> getPrisoners(){
         ArrayList<Prisoner> prisoners = new ArrayList<>();
