@@ -12,13 +12,19 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 import tn.mdevtunisia.sample.prisonapp.adapters.PrisonerAdapter;
+import tn.mdevtunisia.sample.prisonapp.models.Prisoner;
 import tn.mdevtunisia.sample.prisonapp.utils.PrisonerContent;
 
 public class MainActivity extends AppCompatActivity {
 
     private ListView mLvPrisoners;
     private PrisonerAdapter mAdapter;
+
+    ArrayList<Prisoner> mPrisoners;
+    ArrayList<String> mPrisonersName;
 
     public static final String PRISONER_OBJECT_KEY = "prisoners";
 
@@ -38,6 +44,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Use simple adapter that show String value
+//        mPrisonersName = PrisonerContent.getPrisonersName();
+//        mLvPrisoners = (ListView) findViewById(R.id.lv_prisoners);
+//        ArrayAdapter<String> simpleAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mPrisonersName);
+//        mLvPrisoners.setAdapter(simpleAdapter);
+
+        //Use CustomAdapter
+        mPrisoners = PrisonerContent.getPrisoners();
         mLvPrisoners = (ListView) findViewById(R.id.lv_prisoners);
         mAdapter = new PrisonerAdapter(this, R.layout.item_prisoner, PrisonerContent.getPrisoners());
         mLvPrisoners.setAdapter(mAdapter);
