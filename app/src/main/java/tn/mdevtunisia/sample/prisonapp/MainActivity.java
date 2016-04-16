@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -15,18 +17,21 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import tn.mdevtunisia.sample.prisonapp.adapters.PrisonerAdapter;
+import tn.mdevtunisia.sample.prisonapp.fragments.PrisonerListFragment;
 import tn.mdevtunisia.sample.prisonapp.models.Prisoner;
 import tn.mdevtunisia.sample.prisonapp.utils.PrisonerContent;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ListView mLvPrisoners;
-    private PrisonerAdapter mAdapter;
 
     ArrayList<Prisoner> mPrisoners;
     ArrayList<String> mPrisonersName;
 
     public static final String PRISONER_OBJECT_KEY = "prisoners";
+
+    private PrisonerListFragment prisonerListFragment;
+    private FragmentManager fragmentManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,18 +57,14 @@ public class MainActivity extends AppCompatActivity {
 
         //Use CustomAdapter
         mPrisoners = PrisonerContent.getPrisoners();
-        mLvPrisoners = (ListView) findViewById(R.id.lv_prisoners);
-        mAdapter = new PrisonerAdapter(this, R.layout.item_prisoner, PrisonerContent.getPrisoners());
-        mLvPrisoners.setAdapter(mAdapter);
 
-        mLvPrisoners.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, PrisonerDetailActivity.class);
-                intent.putExtra(PRISONER_OBJECT_KEY, PrisonerContent.getPrisoners().get(position));
-                startActivity(intent);
-            }
-        });
+        prisonerListFragment = new PrisonerListFragment();
+        fragmentManager = getSupportFragmentManager();
+
+        FragmentTransaction fragmentTransaction = fragmentManager
+                .beginTransaction();
+        fragmentTransaction.replace(R.id.container, prisonerListFragment);
+        fragmentTransaction.commit();
 
     }
 
@@ -87,5 +88,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0){
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
