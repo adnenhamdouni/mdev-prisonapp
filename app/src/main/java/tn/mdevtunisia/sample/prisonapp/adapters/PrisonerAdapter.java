@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -30,10 +31,13 @@ public class PrisonerAdapter extends RecyclerView.Adapter<PrisonerAdapter.ViewHo
     private ArrayList<Prisoner> mPrisonersList;
     private Context mContext;
 
+    private OnItemClickListener mListener;
 
-    public PrisonerAdapter(Context context, ArrayList<Prisoner> itemsList) {
+
+    public PrisonerAdapter(Context context, OnItemClickListener listener, ArrayList<Prisoner> itemsList) {
         this.mContext = context;
         this.mPrisonersList = itemsList;
+        this.mListener = listener;
 
 
     }
@@ -55,13 +59,17 @@ public class PrisonerAdapter extends RecyclerView.Adapter<PrisonerAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        holder.mPrisonerName.setText(mPrisonersList.get(position).getName());
-        holder.mPrisonerMatricule.setText(mPrisonersList.get(position).getMatricule());
-        holder.mPrisonerDuration.setText(mPrisonersList.get(position).getDuration());
+        Prisoner prisoner = mPrisonersList.get(position);
 
-        holder.mPrisonerPhoto.setImageResource(R.drawable.alcapone);
-//        holder.mItemPhoto.setImageResource(Integer.parseInt(mPrisonersList.get(position)
-//                .getImage()));
+        holder.mPrisonerName.setText(prisoner.getName());
+        holder.mPrisonerMatricule.setText(prisoner.getMatricule());
+        holder.mPrisonerDuration.setText(prisoner.getDuration());
+
+        Picasso.with(mContext).load(prisoner.getImageRes())
+        .resize(150, 150)
+                .centerCrop()
+                .error(R.drawable.default_avatar)
+                .placeholder(holder.mPrisonerPhoto.getDrawable()).into(holder.mPrisonerPhoto);
     }
 
     @Override
@@ -69,7 +77,7 @@ public class PrisonerAdapter extends RecyclerView.Adapter<PrisonerAdapter.ViewHo
         return mPrisonersList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public TextView mPrisonerName;
         public TextView mPrisonerMatricule;
@@ -85,6 +93,15 @@ public class PrisonerAdapter extends RecyclerView.Adapter<PrisonerAdapter.ViewHo
 
         }
 
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            //mListener.onItemClick(v, position);
+        }
+    }
+
+    public interface OnItemClickListener {
+        public void onItemClick(View view, int position);
     }
 
 

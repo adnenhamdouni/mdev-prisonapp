@@ -6,42 +6,27 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
-import tn.mdevtunisia.sample.prisonapp.MainActivity;
 import tn.mdevtunisia.sample.prisonapp.R;
 import tn.mdevtunisia.sample.prisonapp.adapters.PrisonerAdapter;
 import tn.mdevtunisia.sample.prisonapp.helper.MyHelper;
+import tn.mdevtunisia.sample.prisonapp.listeners.RecyclerItemClickListener;
 import tn.mdevtunisia.sample.prisonapp.models.Prisoner;
 import tn.mdevtunisia.sample.prisonapp.models.response.MyResponse;
-import tn.mdevtunisia.sample.prisonapp.utils.PrisonerContent;
 
-public class PrisonerListFragment extends Fragment {
+public class PrisonerListFragment extends Fragment implements PrisonerAdapter.OnItemClickListener{
 
 
     private RecyclerView mRecyclerView;
@@ -75,49 +60,17 @@ public class PrisonerListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_prisoner_list, container, false);
 
-        initData();
-
         initRecyclerView(view);
 
 
         new listUsersAsyncTask().execute();
 
-        //mLvPrisoners = (RecyclerView) view.findViewById(R.id.recycler_list);
-//        mAdapter = new PrisonerAdapter(getActivity(), R.layout.item_prisoner, PrisonerContent.getPrisoners());
-//        mLvPrisoners.setAdapter(mAdapter);
-
-
-
-//        mLvPrisoners.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-////                Intent intent = new Intent(getActivity(), PrisonerDetailActivity.class);
-////                intent.putExtra(MainActivity.PRISONER_OBJECT_KEY, PrisonerContent.getPrisoners().get(position));
-////                startActivity(intent);
-//
-//                PrisonerDetailFragment prisonerDetailFragment = PrisonerDetailFragment.newInstance(prisoners.get(position));
-//                FragmentManager fragmentManager = getFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager
-//                        .beginTransaction();
-//                fragmentTransaction.replace(R.id.container, prisonerDetailFragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//            }
-//        });
 
         return view;
     }
 
-    private void initData() {
-        //prisoners = PrisonerContent.getPrisoners();
-
-
-    }
 
     private void initRecyclerView(View view) {
-
-
-        prisoners = new ArrayList<Prisoner>();
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_list);
 
@@ -126,11 +79,34 @@ public class PrisonerListFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        //mAdapter = new UserAdapter(receiveUsers);
+        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext().getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        // do whatever
+                        Log.e("adnen", "onItemClick position ="+position);
 
-        mAdapter = new PrisonerAdapter(getContext(), prisoners);
+                        PrisonerDetailFragment prisonerDetailFragment = PrisonerDetailFragment.newInstance(prisoners.get(position));
+                        FragmentManager fragmentManager = getFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager
+                                .beginTransaction();
+                        fragmentTransaction.replace(R.id.container, prisonerDetailFragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
 
-        mRecyclerView.setAdapter(mAdapter);
+                    }
+                })
+        );
+
+
+
+
+
+
+
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+
 
     }
 
@@ -142,12 +118,13 @@ public class PrisonerListFragment extends Fragment {
         protected void onPreExecute() {
 
             super.onPreExecute();
-            pDialog = new ProgressDialog(getActivity().getApplicationContext());
-            pDialog.setMessage("Connexion...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
+
+            prisoners = new ArrayList<>();
+            pDialog = new ProgressDialog(getActivity());
+            pDialog.setTitle("In Progress");
+            pDialog.setMessage("En cours du traitement");
+            pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.show();
-            // progress_status = 0;
 
         }
 
@@ -184,8 +161,7 @@ public class PrisonerListFragment extends Fragment {
 
                     prisoners.add(prisoner);
 
-                    Log.v(TAG, "name prisoner ="
-                            + prisoner.getName());
+                    Log.v(TAG, prisoner.toString());
 
                 }
             }
@@ -201,28 +177,29 @@ public class PrisonerListFragment extends Fragment {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
 
+            Log.v(TAG, "success = "
+                    + prisonerResonse.getSuccess());
+
+            if (mResult == true) {
+                Log.v(TAG, "chargement réussite");
+
+                mAdapter = new PrisonerAdapter(getContext().getApplicationContext(), PrisonerListFragment.this, prisoners);
+
+                mRecyclerView.setAdapter(mAdapter);
+
+            } else {
+                Toast.makeText(getActivity().getApplicationContext(),
+                        "probleme de chargement", Toast.LENGTH_SHORT)
+                        .show();
+
+                Log.v(TAG, "probleme de chargement");
+            }
+
             pDialog.dismiss();
 
-
-                    Log.v(TAG, "success = "
-                            + prisonerResonse.getSuccess());
-
-                    if (mResult == true) {
-                        Log.v(TAG, "chargement réussite");
-
-                        //showUsersList();
-                        mAdapter.notifyDataSetChanged();
+        }
 
 
-                    } else {
-                        Toast.makeText(getActivity().getApplicationContext(),
-                                "probleme de chargement", Toast.LENGTH_SHORT)
-                                .show();
-
-                        Log.v(TAG, "probleme de chargement");
-                    }
-
-                }
     }
 
 }

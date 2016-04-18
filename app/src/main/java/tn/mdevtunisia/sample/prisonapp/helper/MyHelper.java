@@ -23,8 +23,8 @@ public class MyHelper {
     public final static String TAG = "HELPER";
 
 
-    public static final String BASE_SERVER_URL = "http://192.168.1.100/mooc/";
-    public static final String BASE_GET_ALL_USERS_URL = "getPrisoners.php";
+    public static final String BASE_SERVER_URL = "http://10.0.2.2/mdev/";
+    public static final String BASE_GET_ALL_USERS_URL = "get_prisoners.php";
 
 
     public static String PrisonersData(String baseUrl, String state) {

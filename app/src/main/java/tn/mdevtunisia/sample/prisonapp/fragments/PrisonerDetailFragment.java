@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import tn.mdevtunisia.sample.prisonapp.MainActivity;
 import tn.mdevtunisia.sample.prisonapp.R;
 import tn.mdevtunisia.sample.prisonapp.models.Prisoner;
@@ -41,7 +43,7 @@ public class PrisonerDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getParcelable(ARG_PARAM1);
+            mParam1 = (Prisoner) getArguments().getSerializable(ARG_PARAM1);
         }
     }
 
@@ -59,6 +61,10 @@ public class PrisonerDetailFragment extends Fragment {
         mTvName.setText(mParam1.getName());
         mTvMatricule.setText(mParam1.getMatricule());
         mTvDuration.setText(mParam1.getDuration());
+
+        Picasso.with(getContext().getApplicationContext()).load(mParam1.getImageRes())
+                .into(mIvPrisoner);
+
         //mIvPrisoner.setBackgroundResource(mParam1.getImageRes());
 
 
