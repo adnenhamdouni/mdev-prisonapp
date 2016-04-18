@@ -49,15 +49,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Use simple adapter that show String value
-//        mPrisonersName = PrisonerContent.getPrisonersName();
-//        mLvPrisoners = (ListView) findViewById(R.id.lv_prisoners);
-//        ArrayAdapter<String> simpleAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mPrisonersName);
-//        mLvPrisoners.setAdapter(simpleAdapter);
-
-        //Use CustomAdapter
-        mPrisoners = PrisonerContent.getPrisoners();
-
         prisonerListFragment = new PrisonerListFragment();
         fragmentManager = getSupportFragmentManager();
 

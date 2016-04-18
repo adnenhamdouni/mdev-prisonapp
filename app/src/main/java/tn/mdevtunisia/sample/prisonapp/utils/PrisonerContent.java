@@ -15,14 +15,14 @@ public class PrisonerContent {
     public static  String[] durations = {"50 years - 1980" , "45 years - 1970" , "35 years - 2009" , "50 years - 2015" , "45 years - 1990"};
     public static Integer[] pictures ={R.drawable.escobar, R.drawable.alcapone, R.drawable.bronson, R.drawable.elchapo, R.drawable.tommy};
 
-    public static ArrayList<Prisoner> getPrisoners(){
-        ArrayList<Prisoner> prisoners = new ArrayList<>();
-        for (int i = 0; i<5; i++){
-            prisoners.add(new Prisoner(names[i], matricules[i], durations[i], pictures[i]));
-        }
-
-        return prisoners;
-    }
+//    public static ArrayList<Prisoner> getPrisoners(){
+//        ArrayList<Prisoner> prisoners = new ArrayList<>();
+//        for (int i = 0; i<5; i++){
+//            prisoners.add(new Prisoner(names[i], matricules[i], durations[i], pictures[i]));
+//        }
+//
+//        return prisoners;
+//    }
 
 
 }

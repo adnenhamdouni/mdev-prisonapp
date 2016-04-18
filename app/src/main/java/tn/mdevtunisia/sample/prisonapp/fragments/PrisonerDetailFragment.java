@@ -32,7 +32,7 @@ public class PrisonerDetailFragment extends Fragment {
     public static PrisonerDetailFragment newInstance(Prisoner param1) {
         PrisonerDetailFragment fragment = new PrisonerDetailFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_PARAM1, param1);
+        args.putSerializable(ARG_PARAM1, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,7 +59,7 @@ public class PrisonerDetailFragment extends Fragment {
         mTvName.setText(mParam1.getName());
         mTvMatricule.setText(mParam1.getMatricule());
         mTvDuration.setText(mParam1.getDuration());
-        mIvPrisoner.setBackgroundResource(mParam1.getImageRes());
+        //mIvPrisoner.setBackgroundResource(mParam1.getImageRes());
 
 
         return view;

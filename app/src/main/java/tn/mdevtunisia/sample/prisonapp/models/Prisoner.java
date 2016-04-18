@@ -3,97 +3,78 @@ package tn.mdevtunisia.sample.prisonapp.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Created by adnenhamdouni on 23/03/2016.
  */
 
-public class Prisoner implements Parcelable{
+public class Prisoner implements Serializable {
 
-    private String mName;
-    private String mMatricule;
-    private String mDuration;
-    private int mImageRes;
+    private int id;
+    private String name;
+    private String mat;
+    private String duration;
+    private String imgPath;
 
-    public Prisoner(String name, String matricule, String duration, int imageRes) {
-        this.mName = name;
-        this.mMatricule = matricule;
-        this.mDuration = duration;
-        this.mImageRes = imageRes;
+
+    public Prisoner() {
+    }
+
+    public Prisoner(String name, String matricule, String duration, String imageRes) {
+        this.name = name;
+        this.mat = matricule;
+        this.duration = duration;
+        this.imgPath = imageRes;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
-        return mName;
+        return name;
     }
 
     public void setName(String name) {
-        this.mName = name;
+        this.name = name;
     }
 
     public String getMatricule() {
-        return mMatricule;
+        return mat;
     }
 
     public void setMatricule(String matricule) {
-        this.mMatricule = matricule;
+        this.mat = matricule;
     }
 
     public String getDuration() {
-        return mDuration;
+        return duration;
     }
 
     public void setDuration(String duration) {
-        this.mDuration = duration;
+        this.duration = duration;
     }
 
-    public int getImageRes() {
-        return mImageRes;
+    public String getImageRes() {
+        return imgPath;
     }
 
-    public void setImageRes(int imageRes) {
-        this.mImageRes = imageRes;
+    public void setImageRes(String imageRes) {
+        this.imgPath = imageRes;
     }
 
     @Override
     public String toString() {
         return "Prisoner{" +
-                "mName='" + mName + '\'' +
-                ", mMatricule='" + mMatricule + '\'' +
-                ", mDuration='" + mDuration + '\'' +
-                ", mImageRes=" + mImageRes +
+                "name='" + name + '\'' +
+                ", mat='" + mat + '\'' +
+                ", duration='" + duration + '\'' +
+                ", imgPath=" + imgPath +
                 '}';
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mName);
-        dest.writeString(mMatricule);
-        dest.writeString(mDuration);
-        dest.writeInt(mImageRes);
-
-    }
-
-    private Prisoner(Parcel in){
-        mName = in.readString();
-        mMatricule = in.readString();
-        mDuration = in.readString();
-        mImageRes = in.readInt();
-    }
-
-    public static final Parcelable.Creator<Prisoner> CREATOR = new Prisoner.Creator<Prisoner>() {
-
-        @Override
-        public Prisoner createFromParcel(Parcel source) {
-            return new Prisoner(source);
-        }
-
-        @Override
-        public Prisoner[] newArray(int size) {
-            return new Prisoner[0];
-        }
-    };
 }
